@@ -39,6 +39,7 @@ function lookTo(dir) {
 }
 function speek() {
 	if (!texts.length) return
+	if (speechSynthesis.speaking) return
 	if (textIndex >= texts.length) return
 	if (texts[textIndex].wait) {
 		setTimeout(() => {
@@ -68,7 +69,8 @@ function setupVoice(text) {
 	synth.rate = 1.5
 	speechSynthesis.speak(synth)
 }
-persona.onclick = () => {
+persona.onclick = e => {
+	e.stopPropagation()
 	speek()
 }
 synth.onboundary = e => {
@@ -85,7 +87,6 @@ synth.onresume = () => {
 	persona.classList.add('speaking')
 }
 synth.onend = () => {
-	speek()
 	persona.classList.remove('speaking')
 }
 synth.onpause = () => {
@@ -105,10 +106,6 @@ window.onclick = () => {
 	speechSynthesis.cancel()
 	persona.classList.remove('speaking')
 }
-/* window.onmousemove = e => {
-	refreshPosition(e.pageX, e.pageY)
-} */
-
 window.onload = () => {
 	let params = new URLSearchParams(location.search)
 	if (!params.get('text')) return
@@ -117,6 +114,9 @@ window.onload = () => {
 		direction: params.get('dir') ?? 5
 	})
 }
+/* window.onmousemove = e => {
+	refreshPosition(e.pageX, e.pageY)
+} */
 document.onreadystatechange = () => {
 	if (document.readyState != 'complete') return
 	persona.classList.add('show')
