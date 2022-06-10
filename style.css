@@ -1,0 +1,156 @@
+* {
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent;
+}
+*:focus {
+	outline: none;
+}
+html {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #121212;
+	background-color: #121212;
+	overflow: hidden;
+}
+figure {
+	--mouth-top: 67%;
+	position: absolute;
+	width: var(--size);
+	height: var(--size);
+	top: calc(50% - (var(--size) / 2));
+	left: calc(50% - (var(--size) / 2));
+	perspective: var(--perspective);
+	transform-style: preserve-3d;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, .75));
+	margin: 0;
+	opacity: 0;
+	z-index: 1;
+}
+figure.show {
+	opacity: 1;
+}
+figure span {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	transform: rotateX(var(--x-angle)) rotateY(var(--y-angle)) rotateZ(var(--z-angle));
+}
+figure span img {
+	width: 100%;
+	height: auto;
+	-webkit-user-drag: none;
+}
+figure span:before {
+	content: "";
+	display: inline-block;
+	position: absolute;
+	left: calc(50% - calc(var(--mouth-size) / 2));
+	background-color: #fff;
+	border-color: #49294b;
+	border-style: solid;
+	will-change: width, height;
+	box-sizing: border-box;
+	z-index: 2;
+}
+figure:not(.speaking) {
+	transition: opacity 500ms ease-in-out, transform 100ms ease-in-out;
+	will-change: transform;
+}
+figure:not(.speaking) span:before {
+	transition: all 50ms;
+}
+figure:not(.a):not(.e):not(.i):not(.o):not(.u) span:before {
+	top: var(--mouth-top);
+	width: var(--mouth-size);
+	height: 2px;
+	border-radius: 50%;
+	background-color: #49294b;
+	left: calc(50% - calc(var(--mouth-size) / 2));
+}
+figure.a span:before {
+	top: calc(var(--mouth-top) - calc(var(--mouth-size) * 0.75 / 2));
+	width: var(--mouth-size);
+	height: calc(var(--mouth-size) * 0.75);
+	border-top-left-radius: 50%;
+	border-top-right-radius: 50%;
+	border-bottom-left-radius: 25%;
+	border-bottom-right-radius: 25%;
+}
+figure.e span:before {
+	top: calc(var(--mouth-top) - calc(var(--mouth-size) * 0.75 / 2));
+	width: var(--mouth-size);
+	height: calc(var(--mouth-size) * 0.75);
+	border-bottom-left-radius: 50%;
+	border-bottom-right-radius: 50%;
+	border-top-left-radius: 25%;
+	border-top-right-radius: 25%;
+}
+figure.i span:before {
+	top: calc(var(--mouth-top) - calc(var(--mouth-size) / 4));
+	width: var(--mouth-size);
+	height: calc(var(--mouth-size) / 2);
+	border-radius: 25%;
+}
+figure.o span:before {
+	top: calc(var(--mouth-top) - calc(var(--mouth-size) / 2));
+	width: var(--mouth-size);
+	height: var(--mouth-size);
+	border-radius: 50%;
+}
+figure.u span:before {
+	top: calc(var(--mouth-top) - calc(var(--mouth-size) / 6));
+	left: calc(50% - calc(var(--mouth-size) / 6));
+	width: calc(var(--mouth-size) / 3);
+	height: calc(var(--mouth-size) / 3);
+	border-radius: 50%;
+}
+figure.speaking span:before {
+	background-color: #fff !important;
+	animation: speaking 500ms infinite;
+}
+@keyframes speaking {
+	0% {
+		top: calc(var(--mouth-top) - calc(var(--mouth-size) * 0.75 / 2));
+		left: calc(50% - calc(var(--mouth-size) / 2));
+		width: var(--mouth-size);
+		height: calc(var(--mouth-size) * 0.75);
+		border-top-left-radius: 50%;
+		border-top-right-radius: 50%;
+		border-bottom-left-radius: 25%;
+		border-bottom-right-radius: 25%;
+	}
+	50% {
+		top: calc(var(--mouth-top) - calc(var(--mouth-size) / 4));
+		left: calc(50% - calc(var(--mouth-size) / 2));
+		width: var(--mouth-size);
+		height: calc(var(--mouth-size) / 2);
+		border-radius: 25%;
+	}
+	75% {
+		top: calc(var(--mouth-top) - calc(var(--mouth-size) / 2));
+		left: calc(50% - calc(var(--mouth-size) / 2));
+		width: var(--mouth-size);
+		height: var(--mouth-size);
+		border-radius: 50%;
+	}
+	100% {
+		top: calc(var(--mouth-top) - calc(var(--mouth-size) / 6));
+		left: calc(50% - calc(var(--mouth-size) / 6));
+		width: calc(var(--mouth-size) / 3);
+		height: calc(var(--mouth-size) / 3);
+		border-radius: 50%;
+	}
+}
+@media screen and (min-width: 601px) {
+	figure span:before {
+		border-width: 4px;
+	}
+}
+@media screen and (max-width: 600px) {
+	figure span:before {
+		border-width: 2px;
+	}
+}
