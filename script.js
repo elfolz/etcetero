@@ -1,9 +1,9 @@
 var audioEnabled = false
 var synth = new SpeechSynthesisUtterance()
 var persona = document.querySelector('figure')
-var textIndex = 0
+var sentenseIndex = 0
 var imgSize
-const texts = []
+var sentenses = []
 
 function refreshPosition(x, y) {
 	let centerWidth = document.documentElement.clientWidth / 2
@@ -38,19 +38,19 @@ function lookTo(dir) {
 	else refreshPosition(-1, -1)
 }
 function speek() {
-	if (!texts.length) return
+	if (!sentenses.length) return
 	if (speechSynthesis.speaking) return
-	if (textIndex >= texts.length) return
-	if (texts[textIndex].wait) {
+	if (sentenseIndex >= sentenses.length) return
+	if (sentenses[sentenseIndex].wait) {
 		setTimeout(() => {
-			lookTo(texts[textIndex].direction)
-			setupVoice(texts[textIndex].text)
-			textIndex++
-		}, texts[textIndex].wait)
+			lookTo(sentenses[sentenseIndex].direction)
+			setupVoice(sentenses[sentenseIndex].text)
+			sentenseIndex++
+		}, sentenses[sentenseIndex].wait)
 	} else {
-		lookTo(texts[textIndex].direction)
-		setupVoice(texts[textIndex].text)
-		textIndex++
+		lookTo(sentenses[sentenseIndex].direction)
+		setupVoice(sentenses[sentenseIndex].text)
+		sentenseIndex++
 	}
 }
 function setupVoice(text) {
@@ -87,6 +87,7 @@ synth.onresume = () => {
 	persona.classList.add('speaking')
 }
 synth.onend = () => {
+	speek()
 	persona.classList.remove('speaking')
 }
 synth.onpause = () => {
@@ -108,11 +109,20 @@ window.onclick = () => {
 }
 window.onload = () => {
 	let params = new URLSearchParams(location.search)
-	if (!params.get('text')) return
-	texts.push({
-		text: params.get('text'),
-		direction: params.get('dir') ?? 5
-	})
+	if (params.get('text')) {
+		sentenses = [{
+			text: params.get('text'),
+			direction: params.get('dir') ?? 5
+		}]
+	} else {
+		fetch('sentenses.json')
+		.then(response => {
+			return response.json()
+		})
+		.then(response => {
+			sentenses = response
+		})
+	}
 }
 /* window.onmousemove = e => {
 	refreshPosition(e.pageX, e.pageY)
